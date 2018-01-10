@@ -23,12 +23,14 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\sprite.cpp" />
     <ClCompile Include="..\src\Vec2.cpp" />
+    <ClCompile Include="..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\lib\font.h" />
     <ClInclude Include="..\lib\litegfx.h" />
     <ClInclude Include="..\lib\sprite.h" />
     <ClInclude Include="..\lib\Vec2.h" />
+    <ClInclude Include="..\lib\world.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -13,11 +13,11 @@
 #include <Vec2.h>
 #include <list>
 //#include <random>
-#include <sprite.h>
+#include <world.h>
 using namespace std;
 
 ltex_t *createTexture(const char *filename, int *width, int *height);
-void beeUpdatePosAngle(Sprite &beeSprite, float &angle, float &pointsX, float &pointsY, double &xposBee, double &yposBee, Vec2 mousePos, Vec2 &beePos, float deltaTime);
+void beeUpdatePosAngle(float &angle,  double &xposBee, double &yposBee, Vec2 mousePos, Vec2 &beePos, float deltaTime);
 
 int main() {
 
@@ -38,11 +38,12 @@ int main() {
 	glfwMakeContextCurrent(window);
 	// Inicializamos LiteGFX
 	lgfx_setup2d(800, 600);
+	int screenWidth, screenHeight;
+	Vec2 screenSize(800, 600);
 
+	World world;
 	int widthBee		= 640;
 	int heightBee		= 92;
-	int widthClouds = 256;
-	int heightClouds = 256;
 	Sprite beeSprite	= Sprite(createTexture("./data/bee_anim.png", &widthBee, &heightBee), 8, 1);
 	
 	beeSprite.setPosition(Vec2(0, 0));
@@ -50,11 +51,29 @@ int main() {
 	beeSprite.setFps(8);
 	beeSprite.setPivot(Vec2(0.5f, 0.5f));
 
-	Sprite cloudsSprite = Sprite(createTexture("./data/clouds.png", &widthBee, &heightBee), 1, 1);
-	cloudsSprite.setPosition(Vec2(0, 0));
-	cloudsSprite.setBlend(BLEND_ALPHA);
-	cloudsSprite.setFps(1);
-	cloudsSprite.setPivot(Vec2(0.5f, 0.5f));
+	int widthBack0 = 4096;
+	int heightBack0 = 800;
+	world.setBackground(0, createTexture("./data/level.png", &widthBack0, &heightBack0));
+	world.setScrollRatio(0, 1);
+
+	int widthBack1 = 256;
+	int heightBack1 = 800;
+	world.setBackground(1, createTexture("./data/trees1.png", &widthBack1, &heightBack1));
+	world.setScrollRatio(1, 0.8);
+
+	int widthBack2 = 256;
+	int heightBack2 = 800;
+	world.setBackground(2, createTexture("./data/trees2.png", &widthBack2, &heightBack2));
+	world.setScrollRatio(2, 0.6);
+
+	int widthBack3 = 256;
+	int heightBack3 = 256;
+	world.setBackground(3, createTexture("./data/clouds.png", &widthBack3, &heightBack3));
+	world.setScrollRatio(3, 0.4);
+	world.setScrollSpeed(3, Vec2(-16, -8));
+
+	world.addSprite(beeSprite);
+
 	int beeFrame;
 	float frame = 0;
 	double lastTime = glfwGetTime();
@@ -62,10 +81,9 @@ int main() {
 	double yposMouse = 0;
 	double xposBee = 0;
 	double yposBee = 0;
-	float pointsX = 0;
-	float pointsY = 0;
+	Vec2 mousePos;
 	float angle=0;
-	
+	Vec2 cameraPosition = world.getCameraPosition();
 	Vec2 beePos;
 	
 	while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE)) {
@@ -74,23 +92,28 @@ int main() {
 		lastTime = glfwGetTime();
 
 		// Actualizamos tamaño de ventana
-		int screenWidth, screenHeight;
+		
 		glfwGetWindowSize(window, &screenWidth, &screenHeight);
 		lgfx_setviewport(0, 0, screenWidth, screenHeight);
-		lgfx_clearcolorbuffer(0.7f, 0.6f, 0.7f);
+		screenSize = Vec2(screenWidth, screenHeight);
+		world.setScreenSize(screenSize);
+		lgfx_clearcolorbuffer(world.getClearRed(), world.getClearGreen(), world.getClearBlue());
+		lgfx_setorigin(world.getCameraPosition().x, world.getCameraPosition().y);
 
 		glfwGetCursorPos(window, &xposMouse, &yposMouse);
-		Vec2 mousePos = Vec2(xposMouse, yposMouse);		
-		
-		beeUpdatePosAngle(beeSprite, angle, pointsX, pointsY, xposBee, yposBee, mousePos, beePos, deltaTime);
+		mousePos = Vec2(static_cast<float>(xposMouse), static_cast<float>(yposMouse));
+		mousePos.x += world.getCameraPosition().x;
+		mousePos.y += world.getCameraPosition().y;		
+		beeUpdatePosAngle(angle, xposBee, yposBee, mousePos, beePos, deltaTime);
 
-		cloudsSprite.update(deltaTime);
-		cloudsSprite.draw();
-
-		beeSprite.update(deltaTime);
-		beeSprite.draw();
+		printf("BEE POS: X->%f  y->%f   CAMERA POS X-> %f \n", beePos.x, beePos.y, world.getCameraPosition().x);
+		//printf("MOUSE POS: X->%f  y->%f   CAMERA POS X-> %f \n", mousePos.x, mousePos.y, world.getCameraPosition().x);
 		
-		
+		world.updateSpritePosition(beePos);
+		world.updateSpriteAngle(angle);		
+		world.update(deltaTime);
+		world.draw(screenSize);
+		world.updateCameraPosition(beePos, deltaTime);
 		
 		
 		// Actualizamos ventana y eventos
@@ -124,9 +147,11 @@ ltex_t* createTexture(const char *filename, int *width, int *height) {
 
 }
 
-void beeUpdatePosAngle(Sprite &beeSprite, float &angle, float &pointsX, float &pointsY, double &xposBee, double &yposBee, Vec2 mousePos, Vec2 &beePos, float deltaTime) {
+void beeUpdatePosAngle(float &angle, double &xposBee, double &yposBee, Vec2 mousePos, Vec2 &beePos, float deltaTime) {
 	Vec2 dist;
 	Vec2 direction;
+	float pointsX;
+	float pointsY;
 	dist = mousePos - beePos;
 	direction = dist.norm();
 
@@ -154,6 +179,4 @@ void beeUpdatePosAngle(Sprite &beeSprite, float &angle, float &pointsX, float &p
 	yposBee += pointsY;
 
 	beePos = Vec2(xposBee, yposBee);
-	beeSprite.setPosition(beePos);
-	beeSprite.setAngle(angle);
 }
