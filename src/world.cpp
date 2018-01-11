@@ -59,19 +59,42 @@ void World::update(float deltaTime) {
 void World::draw(const Vec2& screenSize) {
 	lgfx_setblend(backgroundBlend);
 	//background 3	
-	float u1Back3 = (static_cast<float>(back0->width) / static_cast<float>(back3->width));
-	float v1Back3 = (static_cast<float>(screenSize.y) / static_cast<float>(back3->height));
-	ltex_drawrotsized(back3, 0, 0, 0, 0, 0, back3->width*u1Back3, back3->height*v1Back3, 0, 0, u1Back3, v1Back3);
+	float u0Back3 = (cameraPosition.x / back3->width) * scrollRatio3;
+	float v0Back3 = (cameraPosition.y / back3->height);
+	float u1Back3 = (screenSize.x / back3->width) + u0Back3;
+	float v1Back3 = (screenSize.y / back3->height) + (cameraPosition.y / back3->height);
+
+	ltex_drawrotsized(back3, cameraPosition.x, cameraPosition.y, 0, 0, 0, screenSize.x + u0Back3, screenSize.y + v0Back3, u0Back3, v0Back3, u1Back3, v1Back3);
 	//background 2
-	float u1Back2 = (static_cast<float>(back0->width) / static_cast<float>(back2->width));
-	//float v1Back2 = (static_cast<float>(screenSize.y) / static_cast<float>(back2->height));
-	ltex_drawrotsized(back2, 0, 0, 0, 0, 0, back2->width * u1Back2, back2->height, 0, 0, u1Back2, 1);
+	
+	float u0Back2 = (cameraPosition.x / back2->width) * scrollRatio2;
+	float v0Back2 = (cameraPosition.y / back2->height);
+	float u1Back2 = (screenSize.x / back2->width) + u0Back2;
+	float v1Back2 = 1;
+	//float v1Back2 = (back2->height - cameraPosition.y) / back2->height;
+
+	ltex_drawrotsized(back2, cameraPosition.x, cameraPosition.y, 0, 0, 0, screenSize.x + u0Back2, back2->height - cameraPosition.y , u0Back2, v0Back2, u1Back2, v1Back2);
+
 	//background 1
-	float u1Back1 = (static_cast<float>(back0->width) / static_cast<float>(back1->width));
-	ltex_drawrotsized(back1, 0, 0, 0, 0, 0, back1->width * u1Back1, back1->height, 0, 0, u1Back1, 1);
-	//background 0
-	ltex_drawrotsized(back0, 0, 0, 0, 0, 0, back0->width, back0->height, 0, 0, 1, 1);
-	//Sprite
+	float u0Back1 = (cameraPosition.x / back1->width) * scrollRatio1;
+	float v0Back1 = 0;
+	float u1Back1 = (screenSize.x / back1->width) + u0Back1;
+	float v1Back1 = 1;
+
+	//ltex_drawrotsized(back1, cameraPosition.x, 0, 0, 0, 0, screenSize.x + u0Back1, back1->height, u0Back1, v0Back1, u1Back1, v1Back1);
+
+	////background 0
+	float u0Back0 = (cameraPosition.x / back0->width) * scrollRatio0;
+	float v0Back0 = 0;
+	float u1Back0 = (screenSize.x / back0->width) + u0Back0;
+	float v1Back0 = 1;
+
+	//ltex_drawrotsized(back0, cameraPosition.x, 0, 0, 0, 0, screenSize.x, back0->height, u0Back0, v0Back0, u1Back0, 1);
+
+
+
+	//printf("U0->%f  U1->%f   CAMERA POS X-> %f \n", (cameraPosition.x / back0->width), u1Back0 + (cameraPosition.x / back0->width), cameraPosition.x);
+	////Sprite
 	sprite->draw();
 }
 

@@ -106,7 +106,7 @@ int main() {
 		mousePos.y += world.getCameraPosition().y;		
 		beeUpdatePosAngle(angle, xposBee, yposBee, mousePos, beePos, deltaTime);
 
-		printf("BEE POS: X->%f  y->%f   CAMERA POS X-> %f \n", beePos.x, beePos.y, world.getCameraPosition().x);
+		//printf("BEE POS: X->%f  y->%f   CAMERA POS X-> %f \n", beePos.x, beePos.y, world.getCameraPosition().x);
 		//printf("MOUSE POS: X->%f  y->%f   CAMERA POS X-> %f \n", mousePos.x, mousePos.y, world.getCameraPosition().x);
 		
 		world.updateSpritePosition(beePos);
@@ -156,8 +156,8 @@ void beeUpdatePosAngle(float &angle, double &xposBee, double &yposBee, Vec2 mous
 	direction = dist.norm();
 
 	if (dist.lenght() > 2) {
-		pointsX = 128.0f * deltaTime * direction.x;
-		pointsY = 128.0f * deltaTime * direction.y;
+		pointsX = 240.0f * deltaTime * direction.x;
+		pointsY = 240.0f * deltaTime * direction.y;
 		if (xposBee < mousePos.x && angle > -15) {
 			angle -= (32 * deltaTime);
 		}
