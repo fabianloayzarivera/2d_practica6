@@ -68,10 +68,10 @@ void World::draw(const Vec2& screenSize) {
 	//background 2
 	
 	float u0Back2 = (cameraPosition.x / back2->width) * scrollRatio2;
-	float v0Back2 = (cameraPosition.y / back2->height);
+	float v0Back2 = (cameraPosition.y / back2->height) * scrollRatio2;
 	float u1Back2 = (screenSize.x / back2->width) + u0Back2;
 	float v1Back2 = 1;
-	//float v1Back2 = (back2->height - cameraPosition.y) / back2->height;
+	
 
 	ltex_drawrotsized(back2, cameraPosition.x, cameraPosition.y, 0, 0, 0, screenSize.x + u0Back2, back2->height - cameraPosition.y , u0Back2, v0Back2, u1Back2, v1Back2);
 
@@ -81,7 +81,7 @@ void World::draw(const Vec2& screenSize) {
 	float u1Back1 = (screenSize.x / back1->width) + u0Back1;
 	float v1Back1 = 1;
 
-	//ltex_drawrotsized(back1, cameraPosition.x, 0, 0, 0, 0, screenSize.x + u0Back1, back1->height, u0Back1, v0Back1, u1Back1, v1Back1);
+	ltex_drawrotsized(back1, cameraPosition.x, 0, 0, 0, 0, screenSize.x + u0Back1, back1->height, u0Back1, v0Back1, u1Back1, v1Back1);
 
 	////background 0
 	float u0Back0 = (cameraPosition.x / back0->width) * scrollRatio0;
