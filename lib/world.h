@@ -4,18 +4,20 @@
 class World {
 private:
 	Sprite* sprite;
-	float clearRed = 0.15f;
-	float clearGreen = 0.15f;
-	float clearBlue = 0.15f;
-	const ltex_t* back0 = nullptr;
-	const ltex_t* back1 = nullptr;
-	const ltex_t* back2 = nullptr;
-	const ltex_t* back3 = nullptr;
+	float clearRed;
+	float clearGreen;
+	float clearBlue;
+	const ltex_t* back0;
+	const ltex_t* back1;
+	const ltex_t* back2;
+	const ltex_t* back3;
 	lblend_t backgroundBlend;
 	float scrollRatio0;
 	float scrollRatio1;
 	float scrollRatio2;
 	float scrollRatio3;
+	float back3FrameX;
+	float back3FrameY;
 	Vec2 scrollSpeed0;
 	Vec2 scrollSpeed1;
 	Vec2 scrollSpeed2;
