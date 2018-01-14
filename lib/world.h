@@ -7,10 +7,10 @@ private:
 	float clearRed;
 	float clearGreen;
 	float clearBlue;
-	const ltex_t* back0;
-	const ltex_t* back1;
-	const ltex_t* back2;
-	const ltex_t* back3;
+	ltex_t* back0;
+	ltex_t* back1;
+	ltex_t* back2;
+	ltex_t* back3;
 	lblend_t backgroundBlend;
 	float scrollRatio0;
 	float scrollRatio1;
@@ -27,12 +27,12 @@ private:
 
 public:
 	World();
-	~World() {}
+	~World();
 	float getClearRed() const { return clearRed; }
 	float getClearGreen() const { return clearGreen; }
 	float getClearBlue() const { return clearBlue; }
 	const ltex_t* getBackground(size_t layer) const;
-	void World::setBackground(size_t layer, const ltex_t* tex);
+	void World::setBackground(size_t layer, ltex_t* tex);
 	float getScrollRatio(size_t layer) const;
 	void setScrollRatio(size_t layer, float ratio);
 	const Vec2& getScrollSpeed(size_t layer) const;

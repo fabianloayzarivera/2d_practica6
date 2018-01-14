@@ -84,8 +84,6 @@ void World::draw(const Vec2& screenSize) {
 	ltex_drawrotsized(back0, cameraPosition.x, 0, 0, 0, 0, screenSize.x, back0->height, u0Back0, v0Back0, u1Back0, 1);
 
 
-
-	//printf("U0->%f  U1->%f   CAMERA POS X-> %f \n", (cameraPosition.x / back0->width), u1Back0 + (cameraPosition.x / back0->width), cameraPosition.x);
 	////Sprite
 	sprite->draw();
 }
@@ -110,7 +108,7 @@ const ltex_t* World::getBackground(size_t layer) const {
 	}
 }
 
-void World::setBackground(size_t layer, const ltex_t* tex) {
+void World::setBackground(size_t layer, ltex_t* tex) {
 	switch (layer)
 	{
 	case 0:
@@ -208,4 +206,11 @@ void World::setScrollSpeed(size_t layer, const Vec2& speed) {
 	default:
 		break;
 	}
+}
+
+World::~World() {
+	ltex_free(back0);
+	ltex_free(back1);
+	ltex_free(back3);
+
 }
