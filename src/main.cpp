@@ -51,26 +51,30 @@ int main() {
 	beeSprite.setFps(8);
 	beeSprite.setPivot(Vec2(0.5f, 0.5f));
 
-	int widthBack0 = 4096;
-	int heightBack0 = 800;
-	world.setBackground(0, createTexture("./data/level.png", &widthBack0, &heightBack0));
-	world.setScrollRatio(0, 1);
+	int widthBack3 = 256;
+	int heightBack3 = 256;
+	world.setBackground(0, createTexture("./data/clouds.png", &widthBack3, &heightBack3));
+	world.setScrollRatio(0, 0.4);
+	world.setScrollSpeed(0, Vec2(16, 8));
 
 	int widthBack1 = 256;
 	int heightBack1 = 800;
 	world.setBackground(1, createTexture("./data/trees1.png", &widthBack1, &heightBack1));
 	world.setScrollRatio(1, 0.8);
+	world.setScrollSpeed(1, Vec2(0, 0));
 
 	int widthBack2 = 256;
 	int heightBack2 = 800;
 	world.setBackground(2, createTexture("./data/trees2.png", &widthBack2, &heightBack2));
 	world.setScrollRatio(2, 0.6);
+	world.setScrollSpeed(1, Vec2(0, 0));
 
-	int widthBack3 = 256;
-	int heightBack3 = 256;
-	world.setBackground(3, createTexture("./data/clouds.png", &widthBack3, &heightBack3));
-	world.setScrollRatio(3, 0.4);
-	world.setScrollSpeed(3, Vec2(-16, -8));
+	int widthBack0 = 4096;
+	int heightBack0 = 800;
+	world.setBackground(3, createTexture("./data/level.png", &widthBack0, &heightBack0));
+	world.setScrollRatio(3, 1);
+	world.setScrollSpeed(1, Vec2(0, 0));
+
 
 	world.addSprite(beeSprite);
 
@@ -84,6 +88,7 @@ int main() {
 	Vec2 mousePos;
 	float angle=0;
 	Vec2 cameraPosition = world.getCameraPosition();
+	world.updateWorldSize();
 	Vec2 beePos;
 	
 	while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE)) {
